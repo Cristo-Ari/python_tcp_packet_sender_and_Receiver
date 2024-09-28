@@ -53,6 +53,14 @@ class DraggableCard(QtWidgets.QGroupBox):
         self.port = port
         self.data = data
         self.setFixedSize(200, 100)  # Фиксированный размер карточки
+
+        # Задание случайного цвета для фона карточки
+        random_color = self.generate_random_color()
+        self.setStyleSheet(f"""
+            background-color: {random_color};
+            border: 2px solid #1abc9c;
+            border-radius: 10px;
+        """)
         self.init_ui()
 
         self.start_pos = None
@@ -68,11 +76,18 @@ class DraggableCard(QtWidgets.QGroupBox):
         self.mouseReleaseEvent = self.mouse_release_event
         self.mouseDoubleClickEvent = self.mouse_double_click_event
 
+    def generate_random_color(self):
+        """Генерация случайного цвета в формате RGB."""
+        r = random.randint(50, 100)  # Ограничиваем диапазон, чтобы цвет не был слишком ярким или темным
+        g = random.randint(50, 100)
+        b = random.randint(50, 100)
+        return f'rgb({r}, {g}, {b})'
+
     def mouse_press_event(self, event):
         if event.button() == QtCore.Qt.LeftButton:
             self.start_pos = event.pos()
             self.is_dragging = True
-            self.raise_()  # Перемещение карточки на передний план
+            self.raise_()  # Перемещаем карточку на передний план
 
     def mouse_move_event(self, event):
         if self.is_dragging:
